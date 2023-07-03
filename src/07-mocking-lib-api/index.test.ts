@@ -37,10 +37,17 @@ describe('throttledGetDataFromApi', () => {
     await throttledGetDataFromApi(TEST_PATH);
     jest.runAllTimers();
     expect(mock).toHaveBeenCalledWith(TEST_PATH);
-    //Write your test here
   });
 
   test('should return response data', async () => {
-    // Write your test here
+    jest.useFakeTimers();
+    const TEST_PATH = '/test';
+    const mock = jest.fn().mockResolvedValue({ data: 'response data' });
+    (axios.create as jest.Mock).mockReturnValue({
+      get: mock,
+    });
+    const data = await throttledGetDataFromApi(TEST_PATH);
+    jest.runAllTimers();
+    expect(data).toEqual('response data');
   });
 });
